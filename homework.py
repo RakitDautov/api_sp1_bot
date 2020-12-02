@@ -16,8 +16,12 @@ API_URL = "https://praktikum.yandex.ru/api/user_api/homework_statuses/"
 
 
 def parse_homework_status(homework):
-    homework_name = homework["homework_name"]
-    if homework["status"] != "approved":
+    if homework.get("homework_name") and homework.get("status"):
+        homework_name = homework.get("homework_name")
+        homework_status = homework.get("status")
+    else:
+        return "Ошибка запроса 'homework.get'"
+    if homework_status != "approved":
         verdict = "К сожалению в работе нашлись ошибки."
     else:
         verdict = (
@@ -28,6 +32,8 @@ def parse_homework_status(homework):
 
 def get_homework_statuses(current_timestamp):
     headers = {"Authorization": f"OAuth {PRAKTIKUM_TOKEN}"}
+    if current_timestamp is None:
+        current_timestamp = int(time.time())
     params = {"from_date": current_timestamp}
     try:
         homework_statuses = requests.get(
@@ -59,7 +65,7 @@ def main():
             )
             time.sleep(1200)
 
-        except Exception as e:
+        except requests.exceptions.RequestException as e:
             print(f"Бот столкнулся с ошибкой: {e}")
             time.sleep(5)
 
