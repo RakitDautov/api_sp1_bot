@@ -40,7 +40,7 @@ def get_homework_statuses(current_timestamp):
             API_URL, headers=headers, params=params
         )
         return homework_statuses.json()
-    except Exception as e:
+    except requests.exceptions.RequestException as e:
         logging.error(f"Error {e} at request on server practicum", exc_info=e)
 
 
