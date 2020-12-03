@@ -16,10 +16,9 @@ API_URL = "https://praktikum.yandex.ru/api/user_api/homework_statuses/"
 
 
 def parse_homework_status(homework):
-    if homework.get("homework_name") and homework.get("status"):
-        homework_name = homework.get("homework_name")
-        homework_status = homework.get("status")
-    else:
+    homework_name = homework.get("homework_name")
+    homework_status = homework.get("status")
+    if homework_name is None or homework_status is None:
         return "Ошибка запроса 'homework.get'"
     if homework_status != "approved":
         verdict = "К сожалению в работе нашлись ошибки."
